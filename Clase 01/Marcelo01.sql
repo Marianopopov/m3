@@ -4,6 +4,8 @@ use adventureworks;
 
 -- y muestre la cantidad de órdenes ingresadas en esa fecha.<br>
 
+DROP PROCEDURE CantidadDeOrdenes;
+
 DELIMITER $$
 
 CREATE PROCEDURE CANTIDADDEORDENES(IN FECHA DATE) BEGIN 
@@ -11,8 +13,7 @@ SELECT
 	SELECT
 	    COUNT(OrderDate) as Cantidad_Ordenes
 	FROM salesorderheader
-	WHERE
-	    DATE(OrderDate) = fecha;
+	WHERE DATE(OrderDate) = fecha;
 	END $$ 
 
 

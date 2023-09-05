@@ -59,4 +59,38 @@ SELECT margenBruto(100, -25) as Precio_Final;
 SELECT margenBruto(120.50, 31.17) as Precio_Final;
 
 
+-- 3. Obtner un listado de productos en orden alfabético que muestre cuál 
+-- debería ser el valor de precio de lista, si se quiere aplicar un
+-- margen bruto del 20%, utilizando la función creada en el punto 2,
+-- sobre el campo StandardCost.
+-- Mostrando tambien el campo ListPrice y la diferencia con el nuevo campo creado.
 
+SELECT Name,
+		ListPrice as "precio de lista",
+		margenBruto(StandardCost, 20) as "precio+20%",
+		round(ListPrice - margenBruto(StandardCost, 20),3) as diferencia
+FROM product
+WHERE ListPrice!=0 and StandardCost!=0
+ORDER BY Name;
+
+SELECT Name,
+		StandardCost as costo, 
+		ListPrice as "precio de lista",
+		round(100*(ListPrice/StandardCost-1),2) as margen_actual,
+		margenBruto(StandardCost, 20) as "precio+20%",
+		round(ListPrice - margenBruto(StandardCost, 20),3) as diferencia
+FROM product
+WHERE ListPrice!=0 and StandardCost!=0
+ORDER BY margen_actual 
+limit 5;
+
+SELECT Name,
+		StandardCost as costo, 
+		ListPrice as "precio de lista",
+		round(100*(ListPrice/StandardCost-1),2) as margen_actual,
+		margenBruto(StandardCost, 20) as "precio+20%",
+		round(ListPrice - margenBruto(StandardCost, 20),3) as diferencia
+FROM product
+WHERE ListPrice!=0 and StandardCost!=0
+ORDER BY margen_actual desc
+limit 5;

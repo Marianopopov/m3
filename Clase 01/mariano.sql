@@ -64,3 +64,6 @@ SELECT 	ProductID,
         ListPrice - CalcularMargenBruto(StandardCost, 1.2) as Diferencia
 FROM product
 ORDER BY Name;
+
+
+SELECT * from product;

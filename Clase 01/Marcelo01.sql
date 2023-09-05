@@ -7,16 +7,12 @@ use adventureworks;
 DROP PROCEDURE CantidadDeOrdenes;
 
 DELIMITER $$
-
-CREATE PROCEDURE CANTIDADDEORDENES(IN FECHA DATE) BEGIN 
-SELECT 
-	SELECT
-	    COUNT(OrderDate) as Cantidad_Ordenes
+CREATE PROCEDURE CantidadDeOrdenes(IN FECHA DATE)
+BEGIN
+	SELECT COUNT(OrderDate) as Cantidad_Ordenes
 	FROM salesorderheader
 	WHERE DATE(OrderDate) = fecha;
-	END $$ 
-
-
+END $$
 DELIMITER ;
 
 SELECT
@@ -37,3 +33,23 @@ CALL CantidadDeOrdenes('2020-02-01');
 -- 2. Crear una función que calcule el valor nominal de un margen bruto
 
 -- determinado por el usuario a partir del precio de lista de los productos.
+
+DROP FUNCTION margenBruto;
+
+DELIMITER $$
+
+CREATE PROCEDURE CANTIDADDEORDENES(IN FECHA DATE) BEGIN 
+SELECT 
+	SELECT
+	SELECT
+	SELECT
+	SELECT
+	SELECT
+	SELECT
+	    COUNT(OrderDate) as Cantidad_Ordenes
+	FROM salesorderheader
+	WHERE DATE(OrderDate) = fecha;
+	END $$ 
+
+
+DELIMITER ;

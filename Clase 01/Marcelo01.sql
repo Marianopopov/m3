@@ -94,3 +94,54 @@ FROM product
 WHERE ListPrice!=0 and StandardCost!=0
 ORDER BY margen_actual desc
 limit 5;
+
+-- 4. Crear un procedimiento que reciba como parámetro una fecha desde y 
+-- una hasta, y muestre un listado con los Id de los diez Clientes que 
+-- más costo de transporte tienen entre esas fechas (campo Freight).
+
+SELECT *
+FROM salesorderheader;
+
+
+DROP PROCEDURE IF EXISTS top10costoTransporte;
+
+DELIMITER $$
+CREATE PROCEDURE top10costoTransporte(IN fechainicio DATE, IN fechafinal DATE)
+BEGIN
+	SELECT CustomerID,
+			ROUND(SUM(Freight),2) as CostoTransporte
+	FROM salesorderheader
+	WHERE OrderDate BETWEEN fechainicio AND fechafinal
+	GROUP BY CustomerID
+	ORDER BY CostoTransporte DESC
+	LIMIT 10;
+END $$
+DELIMITER ;
+
+CALL top10costoTransporte('2002-3-1','2002-3-10');
+
+SELECT CustomerID,
+			SUM(Freight) as CostoTransporte
+FROM salesorderheader
+WHERE OrderDate BETWEEN '2002-3-1' AND '2002-3-10'
+GROUP BY CustomerID
+ORDER BY CostoTransporte DESC
+LIMIT 100;
+
+SELECT CustomerID,
+			SUM(Freight) as CostoTransporte
+FROM salesorderheader
+WHERE OrderDate BETWEEN '2002-3-1' AND '2002-3-10'
+GROUP BY CustomerID
+ORDER BY CostoTransporte DESC
+LIMIT 10;
+
+SELECT CustomerID, Freight
+FROM salesorderheader
+WHERE DATE(OrderDate) BETWEEN '2002-3-1' AND '2002-3-10'
+ORDER BY CustomerID;
+
+SELECT CustomerID, Freight
+FROM salesorderheader
+WHERE DATE(OrderDate) BETWEEN '2002-3-1' AND '2002-3-10'
+ORDER BY Freight DESC;

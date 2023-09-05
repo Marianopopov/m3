@@ -109,7 +109,8 @@ DELIMITER $$
 CREATE PROCEDURE top10costoTransporte(IN fechainicio DATE, IN fechafinal DATE)
 BEGIN
 	SELECT CustomerID,
-			ROUND(SUM(Freight),2) as CostoTransporte
+			ROUND(SUM(Freight),2) as CostoTransporte,
+			COUNT(Freight) as cantidad
 	FROM salesorderheader
 	WHERE OrderDate BETWEEN fechainicio AND fechafinal
 	GROUP BY CustomerID
@@ -118,7 +119,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL top10costoTransporte('2002-3-1','2002-3-10');
+CALL top10costoTransporte('2000-1-1','2020-12-31');
 
 SELECT CustomerID,
 			SUM(Freight) as CostoTransporte

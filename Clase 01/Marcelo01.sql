@@ -146,3 +146,22 @@ SELECT CustomerID, Freight
 FROM salesorderheader
 WHERE DATE(OrderDate) BETWEEN '2002-3-1' AND '2002-3-10'
 ORDER BY Freight DESC;
+
+-- 5. Crear un procedimiento que permita realizar la insercción de 
+-- datos en la tabla shipmethod.
+
+DELIMITER $$
+CREATE PROCEDURE inserta_ship(in nombre VARCHAR(50),
+								 shipB DOUBLE,
+								 shipR DOUBLE,
+								  rowg VARBINARY(16)
+								  )
+BEGIN
+	INSERT into shipmethod(Name, ShipBase, ShipRate, rowguid)
+	VALUES(nombre, ShipB, ShipR, rowg);
+END $$
+DELIMITER ;
+
+select * from shipmethod;
+
+CALL inserta_ship("UnNombre", 15.95, 2.89,"NoSeQueVaAca");

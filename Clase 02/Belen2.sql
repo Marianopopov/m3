@@ -39,17 +39,38 @@ group by year(h.orderdate), m.name;
 -- 4. Obtener un listado por categoría de productos, con el valor total de ventas y productos vendidos.
 select*from productcategory;
 select*from product;
-
-
-delimiter $$
-create procedure ordenesxfecha(in fecha date)
-begin
-	select count(*) from salesorderheader
-    where date(orderdate)=fecha;
-end $$
-delimiter ;
-
-call ordenesxfecha('2002-01-01');
-
 select * from salesorderdetail;
-select*from productsubcategory;
+
+select c.name, round(sum(d.linetotal),2) as totalventas, sum(d.orderqty) as cantidadproductos from salesorderheader h
+join salesorderdetail d on (h.salesorderid=d.salesorderid)
+join product p on (d.productid=p.productid)
+join productsubcategory s on (p.productsubcategoryid=s.productsubcategoryid)
+join productcategory c on (s.productcategoryid=c.productcategoryid)
+group by c.name
+order by 2 desc;
+
+-- 5. Obtener un listado por país (según la dirección de envío), con el valor total de ventas y productos vendidos, 
+-- sólo para aquellos países donde se enviaron más de 15 mil productos.
+select* from address;
+select*from countryregion;
+select*from stateprovince;
+select*from salesorderheader;
+select * from salesorderdetail;
+select*from shipmethod;
+
+select cr.name as pais, round(sum(d.linetotal),2) as totalventas, sum(d.orderqty) as cantidadproducto from salesorderheader h
+join salesorderdetail d on (h.salesorderid = d.salesorderid)
+join address a on (h.shiptoaddressid=a.addressid)
+join stateprovince s on (a.stateprovinceid=s.stateprovinceid)
+join countryregion cr on (s.countryregioncode=cr.countryregioncode)
+group by pais having cantidadproducto > 15000
+order by 2 desc;
+
+-- 6.Obtener un listado de las cohortes que no tienen alumnos asignados, utilizando la base de datos henry, 
+-- desarrollada en el módulo anterior.
+use henry;
+select * from cohorte;
+
+select*from cohorte c
+left join alumno a on (c.idcohorte = a.idcohorte)
+where a.idcohorte is null;

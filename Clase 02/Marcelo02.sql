@@ -25,11 +25,13 @@ DESCRIBE salesorderheader;
 SELECT * from Contact;
 DESCRIBE Contact;
 
+SELECT * FROM shipmethod;
+DESCRIBE shipmethod;
 
 
 
+SELECT * from ProductSubcategory
+WHERE Name="Mountain Bikes";
 
-SELECT * FROM contact;
-
-DESCRIBE contact;
-SHOW COLUMNS FROM contact;
+SELECT * FROM shipmethod
+WHERE Name="CARGO TRANSPORT 5";

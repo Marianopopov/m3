@@ -10,7 +10,7 @@ select* from product;
 select*from shipmethod;
 
 
-select distinct c.firstname, c.lastname from salesorderheader h
+select distinct c.conctactid, c.firstname, c.lastname from salesorderheader h
 join contact c on (h.contactid=c.contactid)
 join salesorderdetail d on (h.salesorderid=d.salesorderid)
 join product p on (d.productid=p.productid)
@@ -21,13 +21,13 @@ where year(h.orderdate) between '2000' and '2003' and s.name="Mountain Bikes" an
 -- 2. Obtener un listado contactos que hayan ordenado productos de la subcategoría "Mountain Bikes", entre los
 -- años 2000 y 2003 con la cantidad de productos adquiridos y ordenado por este valor, de forma descendente.
 
-select distinct c.firstname, c.lastname, sum(d.orderqty) as cantidad from salesorderheader h
+select distinct c.contactid, c.firstname, c.lastname, sum(d.orderqty) as cantidad from salesorderheader h
 join contact c on (h.contactid=c.contactid)
 join salesorderdetail d on (h.salesorderid=d.salesorderid)
 join product p on (d.productid=p.productid)
 join productsubcategory s on (p.productsubcategoryid=s.productsubcategoryid)
 where year (h.orderdate) between '2000' and '2003' and s.name="Mountain Bikes" 
-group by c.firstname, c.lastname
+group by c.contactid
 order by cantidad desc;
 
 -- 3.Obtener un listado de cual fue el volumen de compra (cantidad) por año y método de envío.

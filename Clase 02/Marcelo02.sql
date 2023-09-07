@@ -155,3 +155,28 @@ SELECT sm.Name Envio, SUM(sod.OrderQty) Q
     JOIN shipmethod sm ON soh.shipmethodID=sm.shipmethodID
     JOIN salesorderdetail sod ON soh.SalesOrderID=sod.SalesOrderID
 GROUP BY sm.Name;
+
+-- 4. Obtener un listado por categoría de productos,
+-- con el valor total de ventas y productos vendidos.
+
+SELECT pc.Name categoria, ROUND(SUM(sod.LineTotal),2) "Total de Vta", SUM(sod.OrderQty) cantidad
+    FROM salesorderdetail sod
+    JOIN product p ON sod.ProductID=p.ProductID
+    JOIN productsubcategory psc ON p.ProductSubCategoryID=psc.ProductSubCategoryID
+    JOIN productcategory pc ON psc.ProductCategoryID=pc.ProductCategoryID
+GROUP BY pc.Name
+ORDER BY pc.Name;
+
+
+DESCRIBE salesorderdetail;
+
+-- precio x cantidad a veces es diferente al LineTotal
+SELECT UnitPrice, OrderQty, UnitPriceDiscount, (UnitPrice*OrderQty) pxc, LineTotal
+FROM salesorderdetail
+WHERE ROUND((UnitPrice*OrderQty),4)!=ROUND(LineTotal,4);
+-- precio x cantidad menos descuento = LineTotal
+SELECT UnitPrice, OrderQty, (UnitPrice*OrderQty*(1-UnitPriceDiscount)) pxc, LineTotal
+FROM salesorderdetail
+WHERE ROUND((UnitPrice*OrderQty*(1-UnitPriceDiscount)),6)!=ROUND(LineTotal,6);
+
+-- Resumen: LineTotal = UnitPrice*OrderQty*(1-UnitPriceDiscount)

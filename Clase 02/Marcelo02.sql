@@ -220,8 +220,12 @@ DESCRIBE salesorderheader;
 -- ambos ID se relacionan con la tabla Address (AddressID)
 
 
-SELECT *
+SELECT cr.Name Pais, ROUND(SUM(sod.LineTotal),2) "Total de Vta", SUM(sod.OrderQty) cantidad
     FROM salesorderheader soh
     JOIN address a ON soh.ShipToAddressID=a.addressID
     JOIN stateprovince sp ON a.StateProvinceID=sp.StateProvinceID
     JOIN countryregion cr ON sp.CountryRegionCode=cr.CountryRegionCode
+    JOIN salesorderdetail sod ON soh.SalesOrderID=sod.SalesOrderID
+GROUP BY 1
+HAVING cantidad>15000
+ORDER BY 1;

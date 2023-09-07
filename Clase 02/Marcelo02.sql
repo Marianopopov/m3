@@ -35,3 +35,26 @@ WHERE Name="Mountain Bikes";
 
 SELECT * FROM shipmethod
 WHERE Name="CARGO TRANSPORT 5";
+
+
+SELECT *
+    FROM contact c
+    JOIN salesorderheader soh on c.contactid=soh.contactid 
+    JOIN shipmethod sm on soh.shipmethodid=sm.shipmethodid
+    JOIN salesorderdetail sod on soh.salesorderid=sod.salesorderid
+    JOIN product p on sod.productid=p.productid
+    JOIN productsubcategory psc on p.productsubcategoryid=psc.productsubcategoryid
+
+
+-- Listado final (206 registros)
+SELECT DISTINCT c.ContactID, c.LastName, c.FirstName
+    FROM contact c
+    JOIN salesorderheader soh on c.contactid=soh.contactid 
+    JOIN shipmethod sm on soh.shipmethodid=sm.shipmethodid
+    JOIN salesorderdetail sod on soh.salesorderid=sod.salesorderid
+    JOIN product p on sod.productid=p.productid
+    JOIN productsubcategory psc on p.productsubcategoryid=psc.productsubcategoryid
+WHERE psc.Name="Mountain Bikes"
+    AND sm.Name="CARGO TRANSPORT 5"
+    AND YEAR(soh.OrderDate) BETWEEN 2000 AND 2003
+ORDER BY c.LastName, c.FirstName

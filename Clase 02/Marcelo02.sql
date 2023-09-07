@@ -38,7 +38,7 @@ WHERE Name="CARGO TRANSPORT 5";
 
 -- Problema (hay 19972 contactos pero solo 19516 
 --con firstname+lastname diferentes)
-SELECT contactID FROM contact;
+SELECT contactID, FirstName, LastName FROM contact;
 SELECT DISTINCT FirstName, LastName FROM contact;
 
 -- Entonces hay 456 contactos que tienen la misma combinacion
@@ -180,3 +180,48 @@ FROM salesorderdetail
 WHERE ROUND((UnitPrice*OrderQty*(1-UnitPriceDiscount)),6)!=ROUND(LineTotal,6);
 
 -- Resumen: LineTotal = UnitPrice*OrderQty*(1-UnitPriceDiscount)
+
+
+-- 5. Obtener un listado por país (según la dirección de envío),
+-- con el valor total de ventas y productos vendidos,
+-- sólo para aquellos países donde se enviaron más de 15 mil productos.
+
+DESCRIBE countryregion;
+SELECT * FROM countryregion;
+
+DESCRIBE address;
+SELECT * FROM address;
+
+DESCRIBE addresstype;
+SELECT * FROM addresstype;
+
+
+DESCRIBE customer;
+SELECT * FROM customer;
+
+DESCRIBE customeraddress;
+SELECT * FROM customeraddress;
+
+
+SELECT DISTINCT ShipToAddressID FROM salesorderheader
+ORDER BY 1;
+SELECT DISTINCT BillToAddressID FROM salesorderheader
+ORDER BY 1;
+SELECT DISTINCT ShipToAddressID, BillToAddressID from salesorderheader;
+
+SELECT DISTINCT ShipToAddressID, BillToAddressID from salesorderheader
+WHERE ShipToAddressID!=BillToAddressID;
+
+SELECT DISTINCT addressID FROM address
+ORDER BY 1;
+DESCRIBE salesorderheader;
+-- En la tabla SalesOrderHeader hay direccion de envio(Ship)
+-- y direccion de facturacion (Bill)
+-- ambos ID se relacionan con la tabla Address (AddressID)
+
+
+SELECT *
+    FROM salesorderheader soh
+    JOIN address a ON soh.ShipToAddressID=a.addressID
+    JOIN stateprovince sp ON a.StateProvinceID=sp.StateProvinceID
+    JOIN countryregion cr ON sp.CountryRegionCode=cr.CountryRegionCode

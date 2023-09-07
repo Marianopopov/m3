@@ -134,3 +134,24 @@ ORDER BY Q DESC;
 
 -- 3. Obtener un listado de cual fue el volumen de 
 -- compra (cantidad) por año y método de envío.
+
+SELECT YEAR(soh.OrderDate) YEAR, sm.Name Envio, SUM(sod.OrderQty) Q
+    FROM salesorderheader soh
+    JOIN shipmethod sm ON soh.shipmethodID=sm.shipmethodID
+    JOIN salesorderdetail sod ON soh.SalesOrderID=sod.SalesOrderID
+GROUP BY YEAR(soh.OrderDate), sm.Name;
+
+-- extra (solo por año)
+SELECT YEAR(soh.OrderDate) YEAR, SUM(sod.OrderQty) Q
+    FROM salesorderheader soh
+    JOIN shipmethod sm ON soh.shipmethodID=sm.shipmethodID
+    JOIN salesorderdetail sod ON soh.SalesOrderID=sod.SalesOrderID
+GROUP BY YEAR(soh.OrderDate)
+
+
+-- extra (solo por metodo de envio)
+SELECT sm.Name Envio, SUM(sod.OrderQty) Q
+    FROM salesorderheader soh
+    JOIN shipmethod sm ON soh.shipmethodID=sm.shipmethodID
+    JOIN salesorderdetail sod ON soh.SalesOrderID=sod.SalesOrderID
+GROUP BY sm.Name;

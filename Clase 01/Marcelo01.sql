@@ -36,8 +36,6 @@ CALL CantidadDeOrdenes('2020-02-01');
 
 -- 2. Crear una función que calcule el valor nominal de un margen bruto
 -- determinado por el usuario a partir del precio de lista de los productos.
-SET GLOBAL log_bin_trust_function_creators=1;
-
 
 DROP FUNCTION margenBruto;
 
@@ -121,12 +119,15 @@ DELIMITER ;
 
 CALL top10costoTransporte('2000-1-1','2020-12-31');
 
+SELECT * from salesorderheader
+ORDER BY OrderDate;
+
 SELECT CustomerID,
 			SUM(Freight) as CostoTransporte
 FROM salesorderheader
-WHERE OrderDate BETWEEN '2002-3-1' AND '2002-3-10'
-GROUP BY CustomerID
-ORDER BY CostoTransporte DESC
+WHERE OrderDate BETWEEN '2001-7-1' AND '2001-7-30'
+GROUP BY 1
+ORDER BY 2 DESC
 LIMIT 100;
 
 SELECT CustomerID,
@@ -165,3 +166,8 @@ DELIMITER ;
 select * from shipmethod;
 
 CALL inserta_ship("UnNombre", 15.95, 2.89,"NoSeQueVaAca");
+
+SELECT HEX(rowguid) FROM shipmethod;
+
+call inserta_ship('MARTINCITO-party', 6.99, 0.84, UNHEX(REPLACE(UUID(), '-', '')));
+

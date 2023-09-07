@@ -13,6 +13,8 @@ delimiter ;
 
 call Ordenes_ingresadas('2001-07-01');
 
+
+
 -- 2) Crear una función que calcule el valor nominal de un margen bruto determinado por el usuario a 
 -- partir del precio de lista de los productos.
 select * from product;

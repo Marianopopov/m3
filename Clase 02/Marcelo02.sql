@@ -229,3 +229,26 @@ SELECT cr.Name Pais, ROUND(SUM(sod.LineTotal),2) "Total de Vta", SUM(sod.OrderQt
 GROUP BY 1
 HAVING cantidad>15000
 ORDER BY 1;
+
+
+-- 6. Obtener un listado de las cohortes que no tienen alumnos asignados,
+-- utilizando la base de datos henry, desarrollada en el módulo anterior.
+
+use henry;
+
+SELECT * from cohorte;
+DESCRIBE cohorte;
+SELECT * FROM alumno;
+DESCRIBE alumno;
+
+-- con right
+SELECT c.idCohorte, c.codigo
+    FROM alumno a
+    RIGHT JOIN cohorte c ON a.idCohorte=c.idCohorte
+WHERE a.idCohorte IS NULL;
+
+-- con left
+SELECT c.idCohorte, c.codigo
+    FROM cohorte c
+    LEFT JOIN alumno a ON c.idCohorte=a.idCohorte
+WHERE a.idCohorte IS NULL;

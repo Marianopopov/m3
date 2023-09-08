@@ -73,3 +73,28 @@ from
 ;
 
 -- 290 ms
+
+
+-- 2
+SELECT
+categoria, 
+cantidad, 
+total,
+cantidad / sum(cantidad) over() * 100 as prorcentaje_Cantidad,
+total / sum(total) over() * 100 as porcentaje_venta
+from 
+        (SELECT
+            c.name as categoria,
+            sum(d.orderqty) as cantidad, 
+            sum(d.linetotal) as total
+        from salesorderheader as h
+            join salesorderdetail as d on (h.salesorderID = d.salesorderID)
+            join product as p on (d.ProductID = p.ProductID)
+            join productsubcategory as sub on (p.productsubcategoryID = sub.productsubcategoryID)
+            join productcategory as c on (sub.productcategoryID = c.productcategoryID)
+            
+        GROUP BY c.name
+        ORDER BY total) as productos_por_categoria
+        ;
+
+    

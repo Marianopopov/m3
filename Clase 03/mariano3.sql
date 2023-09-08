@@ -16,7 +16,7 @@ mostrando para ambos, su porcentaje respecto del total.<br>
 Investigar las funciones FLOOR() y CEILING().*/
 
 use adventureworks;
-
+-- 1
 -- total por año
 
 select 

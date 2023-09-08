@@ -167,7 +167,13 @@ select * from shipmethod;
 
 CALL inserta_ship("UnNombre", 15.95, 2.89,"NoSeQueVaAca");
 
-SELECT HEX(rowguid) FROM shipmethod;
+SELECT rowguid, HEX(rowguid) FROM shipmethod;
 
 call inserta_ship('MARTINCITO-party', 6.99, 0.84, UNHEX(REPLACE(UUID(), '-', '')));
 
+
+SELECT * FROM shipmethod;
+
+call inserta_ship('Met09', 1.99, 0.99, UNHEX(REPLACE(UUID(), '-', '')));
+
+call inserta_ship('Met10', 1.99, 0.99, UNHEX(REPLACE(UUID(), '-', '')));

@@ -17,6 +17,8 @@ Investigar las funciones FLOOR() y CEILING().*/
 
 use adventureworks;
 -- 1
+
+-- subconsultas 
 -- total por año
 
 select 
@@ -29,6 +31,7 @@ group by YEAR(h.`OrderDate`);
 
 
 
+create VIEW Cantidad_año_envio as
 select 
   YEAR(h.`OrderDate`) as anio,
   s.name as metodoenvio,
@@ -49,3 +52,24 @@ from salesorderheader as h
 group BY YEAR(h.`OrderDate`), s.`Name`, t.cantidadTotal
 ORDER BY YEAR(h.`OrderDate`), s.`Name`;
 
+-- 815 ms
+
+-- funcion ventana
+SELECT
+anio,
+metodoenvio,
+cantidad,
+cantidad / sum(cantidad) OVER (PARTITION BY anio) * 100 as porcenta_año_total
+from
+        (SELECT
+            YEAR(h.`OrderDate`) as anio,
+            s.name as metodoenvio,
+            sum(d.`OrderQty`) as cantidad
+        from salesorderheader h
+            join salesorderdetail d ON (h.`SalesOrderID` = d.`SalesOrderID`)
+            join shipmethod s ON (s.`ShipMethodID` = h.`ShipMethodID`)
+        group BY YEAR(h.`OrderDate`), s.`Name`
+        ORDER BY YEAR(h.`OrderDate`), s.`Name`) as v
+;
+
+-- 290 ms

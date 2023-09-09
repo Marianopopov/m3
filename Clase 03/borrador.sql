@@ -115,3 +115,62 @@ ORDER BY `idAlumno` DESC;
 
 DELETE FROM alumno WHERE idAlumno >180;
 
+
+-- cohortes sin alumnos registrados 
+
+select * 
+from cohorte
+where idcohorte NOT IN  
+        (select DISTINCT idcohorte from alumno);
+
+
+-- VISTAS (PERMITE ALMACENAR DE FORMA PERMANENTE EL RESULTADO DE UNA QUERY)
+-- (CREA UNA TABLA VIRTUAL)
+
+
+-- CREAR UNA VISTA (DE LA CONSULTA ANTERIOR)
+
+CREATE VIEW  COHORTE_SIN_ALUMNOS AS
+select * 
+from cohorte
+where idcohorte NOT IN  
+        (select DISTINCT idcohorte from alumno);
+
+-- Select de la vista
+
+SELECT * FROM cohorte_sin_alumnos;
+
+DROP VIEW cohorte_sin_alumnos;
+
+CREATE VIEW  COHORTE_SIN_ALUMNOS AS
+select * 
+from cohorte
+where idcohorte IN  
+        (select DISTINCT idcohorte from alumno)
+        IS FALSE;
+
+-- NOT IN "algo"  = IN "algo" IS FALSE  ? diferencias?
+
+
+-- Crear y Modificar una vista.
+CREATE VIEW primerosAlumnos AS
+SELECT idAlumno, fechaIngreso
+FROM alumno
+WHERE fechaIngreso = (  SELECT MIN(fechaIngreso) AS fecha
+                        FROM alumno)
+
+-- Obtener los resultados de una vista.
+SELECT *
+FROM primerosAlumnos
+
+-- Modificar una vista.
+ALTER VIEW primerosAlumnos AS
+SELECT idAlumno, CONCAT(apellido," ",nombre), fechaIngreso
+FROM alumno
+WHERE fechaIngreso = (  SELECT MIN(fechaIngreso) AS fecha
+                        FROM alumno)
+
+-- Eliminar una vista
+DROP VIEW primerosAlumnos
+
+----------------

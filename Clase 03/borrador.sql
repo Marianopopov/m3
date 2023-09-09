@@ -1,5 +1,6 @@
 -- Active: 1693280239040@@127.0.0.1@3306@henry
--- SUBCONSULTAS
+-- SUBCONSULTAS 
+-- Gonzalo del Rio (DATAPT04 Lecture)
 use henry;
 
 -- cual era el primer alumno/s que ingreso/aron a henry
@@ -174,3 +175,118 @@ WHERE fechaIngreso = (  SELECT MIN(fechaIngreso) AS fecha
 DROP VIEW primerosAlumnos
 
 ----------------
+-- FUNCION DE VENTANA
+
+use checkpoint_m2;
+
+
+SELECT * from venta;
+-- promedio de ventas por fecha
+
+select  fecha,
+        avg (precio*cantidad) as promedio_ventas
+from venta
+GROUP BY fecha;
+
+-- unimos el promedio de ventas por fecha con las ventas por fecha 
+
+SELECT  v.fecha,
+        v.precio * v.cantidad as venta, 
+        v2.promedio_ventas 
+from venta v JOIN (select  fecha, 
+                        avg(precio*cantidad) as promedio_ventas 
+                        from venta GROUP BY fecha ) v2
+on (v.fecha = v2.fecha);
+
+
+-- QUERY CON VENTANA
+SELECT v.fecha,
+        v.precio * v.cantidad as venta,
+        avg(v.precio * v.cantidad) OVER (PARTITION BY v.fecha) as promedio_ventas
+from venta v;
+
+
+SELECT  v.fecha,
+        v.precio * v.cantidad as venta, 
+        v2.promedio_ventas 
+from venta v JOIN (select  fecha, 
+                        avg(precio*cantidad) as promedio_ventas 
+                        from venta GROUP BY fecha ) v2
+on (v.fecha = v2.fecha)
+WHERE v.fecha='2015-01-01';
+
+SELECT v.fecha,
+        v.precio * v.cantidad as venta,
+        avg(v.precio * v.cantidad) OVER (PARTITION BY v.fecha) as promedio_ventas
+from venta v
+WHERE v.fecha='2015-01-01';
+
+-- RANK
+
+SELECT   RANK() OVER (PARTITION BY V.FECHA ORDER BY V.PRECIO * V.CANTIDAD DESC) as ranking_venta, 
+        v.fecha,
+        v.idcliente,
+        v.precio,
+        v.cantidad,
+        (v.precio * v.cantidad) as venta
+from venta v;
+
+SELECT   RANK() OVER (PARTITION BY V.FECHA ORDER BY V.PRECIO * V.CANTIDAD DESC) as ranking_venta, 
+        v.fecha,
+        v.idcliente,
+        v.precio,
+        v.cantidad,
+        (v.precio * v.cantidad) as venta
+from venta v
+where v.fecha = '2015-01-01';
+
+SELECT   RANK() OVER (PARTITION BY V.FECHA) as ranking_venta, 
+        v.fecha,
+        v.idcliente,
+        v.precio,
+        v.cantidad,
+        (v.precio * v.cantidad) as venta
+from venta v
+where v.fecha = '2015-01-01'
+ORDER BY V.PRECIO * V.CANTIDAD DESC;
+
+SELECT   RANK() OVER (PARTITION BY V.FECHA ORDER BY V.PRECIO * V.CANTIDAD DESC) as ranking_venta, 
+        v.fecha,
+        v.idcliente,
+        v.precio,
+        v.cantidad,
+        (v.precio * v.cantidad) as venta
+from venta v
+where v.fecha = '2015-01-01'
+order by v.idcliente, V.PRECIO * V.CANTIDAD;
+
+--ord por fecha   
+
+SELECT   RANK() OVER (PARTITION BY V.FECHA ORDER BY v.fecha DESC) as ranking_venta, 
+        v.fecha,
+        v.idcliente,
+        v.precio,
+        v.cantidad,
+        (v.precio * v.cantidad) as venta
+from venta v;
+
+
+SELECT   RANK() OVER (PARTITION BY V.FECHA) as ranking_venta, 
+        v.fecha,
+        v.idcliente,
+        v.precio,
+        v.cantidad,
+        (v.precio * v.cantidad) as venta
+from venta v
+where v.fecha = '2015-01-01'
+ORDER BY v.fecha DESC;
+
+SELECT   RANK() OVER (PARTITION BY V.FECHA order by (v.precio * v.cantidad) desc) as ranking_venta, 
+        v.fecha,
+        v.idcliente,
+        v.precio,
+        v.cantidad,
+        (v.precio * v.cantidad) as venta
+from venta v
+where v.fecha = '2015-01-01';
+

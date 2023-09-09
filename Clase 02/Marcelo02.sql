@@ -83,6 +83,16 @@ WHERE psc.Name="Mountain Bikes"
     AND YEAR(soh.OrderDate) BETWEEN 2000 AND 2003
 ORDER BY c.LastName, c.FirstName
 
+SELECT DISTINCT c.LastName, c.FirstName
+    FROM contact c
+    JOIN salesorderheader soh on c.contactid=soh.contactid 
+    JOIN shipmethod sm on soh.shipmethodid=sm.shipmethodid
+    JOIN salesorderdetail sod on soh.salesorderid=sod.salesorderid
+    JOIN product p on sod.productid=p.productid
+    JOIN productsubcategory psc on p.productsubcategoryid=psc.productsubcategoryid
+WHERE psc.Name="Mountain Bikes"
+    AND sm.Name="CARGO TRANSPORT 5"
+    AND YEAR(soh.OrderDate) BETWEEN 2000 AND 2003
 
 -- 2. Obtener un listado contactos que hayan ordenado productos 
 -- de la subcategoría "Mountain Bikes", entre los años 2000 y 2003
@@ -252,3 +262,19 @@ SELECT c.idCohorte, c.codigo
     FROM cohorte c
     LEFT JOIN alumno a ON c.idCohorte=a.idCohorte
 WHERE a.idCohorte IS NULL;
+
+-- con subconsulta
+SELECT *
+    FROM cohorte
+WHERE idCohorte NOT IN
+    (SELECT idCohorte FROM alumno);
+
+SELECT idCohorte FROM alumno
+
+-- sera mas optimo?
+SELECT *
+    FROM cohorte
+WHERE idCohorte NOT IN
+    (SELECT DISTINCT idCohorte FROM alumno);
+
+SELECT DISTINCT idCohorte FROM alumno

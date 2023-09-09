@@ -51,7 +51,7 @@ order by 2 desc;
 
 -- 5. Obtener un listado por país (según la dirección de envío), con el valor total de ventas y productos vendidos, 
 -- sólo para aquellos países donde se enviaron más de 15 mil productos.
-select* from address;
+select*  from address;
 select*from countryregion;
 select*from stateprovince;
 select*from salesorderheader;

@@ -72,3 +72,46 @@ DELETE FROM alumno WHERE idAlumno =
 -- una subconsulta que hace referencia a la misma tabla en la cláusula FROM
 
 DELETE FROM alumno WHERE idAlumno = 181
+
+--para solucionar esto se puede crear una tabla temporal
+-- Crea una tabla temporal para almacenar los IDs de las filas que se eliminarán
+CREATE TEMPORARY TABLE temporal AS
+SELECT idAlumno
+    FROM alumno
+    WHERE nombre="Juan" 
+    AND apellido="Perez"
+
+-- Elimina las filas de la tabla original utilizando la tabla temporal
+DELETE FROM alumno WHERE idAlumno IN (SELECT idAlumno FROM temporal);
+
+-- Elimina la tabla temporal
+DROP TEMPORARY TABLE temporal;
+
+SELECT COUNT(*) FROM alumno;
+
+INSERT INTO alumno (cedulaidentidad, 
+                    nombre, 
+                    apellido, 
+                    fechaNacimiento, 
+                    fechaIngreso, 
+                    idCohorte)
+VALUES  ('3585564', 'Juan', 'Perez', '2001-01-01', '2019-12-04', 1236),
+        ('2458714', 'Pedro', 'Perez', '2002-01-01', '2019-12-04', 1236),
+        ('1236547', 'Carlos', 'Gomez', '2003-01-01', '2019-12-04', 1238),
+        ('3355889', 'Maria', 'Perez', '1999-01-01', '2019-12-04', 1239);
+
+SELECT 
+        nombre
+        , apellido
+        , fechaingreso
+from alumno
+where fechaingreso = 
+        (select MIN(fechaingreso)
+        from alumno);
+
+SELECT * FROM alumno
+ORDER BY `idAlumno` DESC;
+
+
+DELETE FROM alumno WHERE idAlumno >180;
+

@@ -124,3 +124,10 @@ from
 
 -- 4 Obtener por ProductID, los valores correspondientes a la mediana de las ventas (LineTotal), sobre las ordenes realizadas. 
 -- Investigar las funciones FLOOR() y CEILING().*/
+
+
+
+
+
+
+

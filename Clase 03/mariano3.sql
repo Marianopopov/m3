@@ -75,7 +75,8 @@ from
 -- 290 ms
 
 
--- 2
+-- 2. Obtener un listado por categoría de productos, con el valor total de ventas y productos vendidos, 
+-- mostrando para ambos, su porcentaje respecto del total.<br>
 SELECT
 categoria, 
 cantidad, 
@@ -97,4 +98,42 @@ from
         ORDER BY total) as productos_por_categoria
         ;
 
-    
+-- 3. Obtener un listado por país (según la dirección de envío), con el valor total de ventas y productos vendidos, 
+-- mostrando para ambos, su porcentaje respecto del total.
+
+SELECT
+pais, 
+cantidad, 
+total,
+cantidad / sum(cantidad) over() * 100 as prorcentaje_Cantidad,
+total / sum(total) over() * 100 as porcentaje_venta
+from 
+        (SELECT
+            cr.name as pais,
+            sum(d.`OrderQty`) as cantidad, 
+            sum(d.`LineTotal`) as total
+        from salesorderheader as h
+            join salesorderdetail as d on (h.`SalesOrderID` = d.`SalesOrderID`)
+            join address as a on (h.`ShipToAddressID` = a.`AddressID`)
+            join stateprovince as sp on (sp.`StateProvinceID` = a.`StateProvinceID`)
+            join countryregion as cr on (cr.`CountryRegionCode` = sp.`CountryRegionCode`)    
+        GROUP BY cr.`Name`
+        ORDER BY cr.`Name`) as listado_pais 
+        ;
+
+
+-- 4 Obtener por ProductID, los valores correspondientes a la mediana de las ventas (LineTotal), sobre las ordenes realizadas. 
+-- Investigar las funciones FLOOR() y CEILING().*/
+
+-- calcule la media // no entiendo ni hay forma de que entienda que hace en el resuelto jaja
+SELECT 
+    ProductID,
+    AVG(LineTotal) as media,
+    COUNT(`SalesOrderID`) as cantidad
+FROM salesorderdetail
+GROUP BY ProductID
+ORDER BY `ProductID`;
+
+
+
+

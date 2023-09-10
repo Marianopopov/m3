@@ -128,11 +128,29 @@ from
 -- calcule la media // no entiendo ni hay forma de que entienda que hace en el resuelto jaja
 SELECT 
     ProductID,
-    AVG(LineTotal) as media,
-    COUNT(`SalesOrderID`) as cantidad
+    avg(LineTotal) as media,
+    COUNT(`orderqty`) as cantidad
 FROM salesorderdetail
 GROUP BY ProductID
 ORDER BY `ProductID`;
+
+
+SELECT
+ProductID, 
+AVG(LineTotal) AS Mediana_Producto, 
+Conteo
+from
+    (SELECT
+        d.productid,
+        d.linetotal,
+        count(*) over (PARTITION BY d.`ProductID`) as conteo,
+        ROW_NUMBER () OVER (PARTITION BY d.`ProductID` ORDER BY d.linetotal) as row_num
+    FROM salesorderheader H
+        join salesorderdetail D on (h.salesorderID = d.salesorderID)) as sub
+where (FLOOR(conteo/2) = CEILING(conteo/2) and row_num = FLOOR(conteo/2) or row_num = FLOOR(conteo/2) + 1)
+GROUP BY productID
+    ;
+
 
 
 

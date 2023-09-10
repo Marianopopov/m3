@@ -125,16 +125,6 @@ from
 -- 4 Obtener por ProductID, los valores correspondientes a la mediana de las ventas (LineTotal), sobre las ordenes realizadas. 
 -- Investigar las funciones FLOOR() y CEILING().*/
 
--- calcule la media // no entiendo ni hay forma de que entienda que hace en el resuelto jaja
-SELECT 
-    ProductID,
-    avg(LineTotal) as media,
-    COUNT(`orderqty`) as cantidad
-FROM salesorderdetail
-GROUP BY ProductID
-ORDER BY `ProductID`;
-
-
 SELECT
 ProductID, 
 AVG(LineTotal) AS Mediana_Producto, 

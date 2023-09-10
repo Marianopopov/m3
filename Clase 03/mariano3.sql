@@ -137,7 +137,8 @@ from
         ROW_NUMBER () OVER (PARTITION BY d.`ProductID` ORDER BY d.linetotal) as row_num
     FROM salesorderheader H
         join salesorderdetail D on (h.salesorderID = d.salesorderID)) as sub
-where (FLOOR(conteo/2) = CEILING(conteo/2) and row_num = FLOOR(conteo/2) or row_num = FLOOR(conteo/2) + 1)
+where (FLOOR(conteo/2) = CEILING(conteo/2) and row_num = FLOOR(conteo/2) or row_num = FLOOR(conteo/2) + 1) 
+            or ((FLOOR(conteo/2)) <> CEILING(conteo/2) AND row_num = CEILING(conteo/2))
 GROUP BY productID
     ;
 

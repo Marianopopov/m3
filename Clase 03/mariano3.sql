@@ -127,7 +127,7 @@ from
 
 SELECT
 ProductID, 
-AVG(LineTotal) AS Mediana_Producto, 
+AVG(LineTotal) AS Mediana, 
 Conteo
 from
     (SELECT

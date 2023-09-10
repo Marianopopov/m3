@@ -41,6 +41,30 @@ SELECT YEAR(`OrderDate`) as anio
         ON h.`SalesOrderID`=d.`SalesOrderID`
 GROUP BY YEAR(`OrderDate`), s.`Name`;
 
+
+-- RESOLUCION 1
+-- SUBCONSULTA EN EL JOIN (como si fuera otra tabla)
+SELECT YEAR(`OrderDate`) as anio
+        , m.`Name`
+        , SUM(`OrderQty`) as cantidad
+        , ROUND(100*SUM(`OrderQty`)/MIN(suma),2) as "%"
+        , MIN(suma) -- solo para ver los valores, da igual si es min/max/avg
+    FROM salesorderdetail d
+    JOIN salesorderheader h 
+        ON d.`SalesOrderID`=h.`SalesOrderID`
+    JOIN shipmethod m
+        ON h.`ShipMethodID`=m.`ShipMethodID`
+    JOIN (SELECT SUM(`OrderQty`) as suma
+                , YEAR(`OrderDate`) as anio
+            FROM salesorderheader h
+            JOIN salesorderdetail d
+                ON h.`SalesOrderID`=d.`SalesOrderID`
+        GROUP BY YEAR(`OrderDate`)) as sub
+        ON YEAR(`OrderDate`)=sub.anio
+GROUP BY 1,2
+ORDER BY 1,2;
+
+
 -- RESOLUCION 2
 -- USANDO VENTANA
 SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY anio),2) "%"

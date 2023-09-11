@@ -239,13 +239,13 @@ WHERE 	(Cnt%2=0 AND (RowNum = FLOOR(Cnt/2) + 1))
 GROUP BY 1;
 
 -- RESOLUCION FINAL OPTIMIZADA RAPIDA
-SELECT ProductID, AVG(LineTotal) mediana
-FROM (
-	SELECT	ProductID,
-			LineTotal, 
-			COUNT(*) OVER (PARTITION BY ProductID) AS C,
-			ROW_NUMBER() OVER (PARTITION BY ProductID ORDER BY LineTotal) AS R
-	FROM salesorderdetail) v
+SELECT ProductID
+    , AVG(LineTotal) AS mediana
+FROM (SELECT ProductID
+        , LineTotal
+        , COUNT(*) OVER (PARTITION BY ProductID) AS C
+        , ROW_NUMBER() OVER (PARTITION BY ProductID ORDER BY LineTotal) AS R
+	    FROM salesorderdetail) sub
 WHERE 	(C%2=0 AND (R = FLOOR(C/2) + 1))
 	    OR
 		(R = CEILING(C/2))

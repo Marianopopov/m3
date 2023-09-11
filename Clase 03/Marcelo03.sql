@@ -251,6 +251,19 @@ WHERE 	(C%2=0 AND (R = FLOOR(C/2) + 1))
 		(R = CEILING(C/2))
 GROUP BY 1;
 
+-- RESOLUCION SIN FLOOR NI CEILING
+SELECT ProductID
+    , AVG(LineTotal) AS mediana
+FROM (SELECT ProductID
+        , LineTotal
+        , COUNT(*) OVER (PARTITION BY ProductID) AS C
+        , ROW_NUMBER() OVER (PARTITION BY ProductID ORDER BY LineTotal) AS R
+	    FROM salesorderdetail) sub
+WHERE 	(C%2=0 AND (R = C/2 + 1))
+	    OR
+		(R = ROUND(C/2+0.5,0))
+GROUP BY 1;
+
 
 
 

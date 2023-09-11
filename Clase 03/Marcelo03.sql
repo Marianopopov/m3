@@ -1,3 +1,4 @@
+-- Active: 1693280239040@@127.0.0.1@3306@adventureworks
 USE adventureworks;
 
 -- 1. Obtener un listado de cuál fue el volumen de ventas (cantidad) por año 
@@ -86,11 +87,10 @@ SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY 
 -- mostrando para ambos, su porcentaje respecto del total.
 
 SELECT sum(LineTotal)
-    FROM salesorderdetail
-
+    FROM salesorderdetail;
 
 SELECT sum(`OrderQty`)
-    FROM salesorderdetail
+    FROM salesorderdetail;
 
 SELECT c.`Name`, SUM(`LineTotal`), SUM(`OrderQty`)
     FROM salesorderdetail d
@@ -100,7 +100,7 @@ SELECT c.`Name`, SUM(`LineTotal`), SUM(`OrderQty`)
         ON p.`ProductSubcategoryID`=s.`ProductSubcategoryID`
     JOIN productcategory c
         ON s.`ProductCategoryID`=c.`ProductCategoryID`
-GROUP BY 1
+GROUP BY 1;
 
 
 -- RESOLUCION CON SUBCONSULTA EN EL SELECT
@@ -118,4 +118,44 @@ SELECT c.`Name`
     JOIN productcategory c
         ON s.`ProductCategoryID`=c.`ProductCategoryID`
 GROUP BY 1
-ORDER BY 1
+ORDER BY 1;
+
+
+-- 3. Obtener un listado por país (según la dirección de envío),
+--  con el valor total de ventas y productos vendidos,
+--   mostrando para ambos, su porcentaje respecto del total.
+
+SELECT * FROM salesorderheader;
+
+SELECT c.`Name` 
+    FROM salesorderheader h
+    JOIN salesorderdetail d
+        ON h.`SalesOrderID`=d.`SalesOrderID`
+    JOIN address a  
+        ON h.`ShipToAddressID`=a.`AddressID`
+    JOIN stateprovince p
+        ON a.`StateProvinceID`=p.`StateProvinceID`
+    JOIN countryregion c
+        ON p.`CountryRegionCode`=c.`CountryRegionCode`
+GROUP BY 1;
+
+
+-- 4. Obtener por ProductID, los valores correspondientes a la mediana de las ventas (LineTotal)
+-- , sobre las ordenes realizadas. Investigar las funciones FLOOR() y CEILING()
+
+SELECT `ProductID`
+    , sum(`LineTotal`)
+    , COUNT(LineTotal) as q
+    , max(`LineTotal`)
+    , min(`LineTotal`)
+    FROM salesorderdetail
+GROUP BY `ProductID`
+order by q ;
+
+SELECT `ProductID`, `LineTotal`
+    FROM salesorderdetail
+WHERE `ProductID`=927
+ORDER BY 2;
+
+
+

@@ -198,16 +198,61 @@ ORDER BY 1;
 SELECT `ProductID`
     , sum(`LineTotal`)
     , COUNT(LineTotal) as q
-    , max(`LineTotal`)
-    , min(`LineTotal`)
     FROM salesorderdetail
 GROUP BY `ProductID`
-order by q ;
+order by 1 ;
 
-SELECT `ProductID`, `LineTotal`
-    FROM salesorderdetail
-WHERE `ProductID`=927
+SELECT ProductID, Cnt, AVG(LineTotal) mediana,CEILING(Cnt/2), FLOOR(Cnt/2) + 1
+FROM (
+	SELECT	ProductID,
+			LineTotal, 
+			COUNT(*) OVER (PARTITION BY ProductID) AS Cnt,
+			ROW_NUMBER() OVER (PARTITION BY ProductID ORDER BY LineTotal) AS RowNum
+	FROM salesorderdetail) v
+WHERE 	(Cnt%2=0 AND (RowNum = CEILING(Cnt/2) OR RowNum = FLOOR(Cnt/2) + 1))
+	    OR
+		(Cnt%2=1 AND RowNum = CEILING(Cnt/2))
+GROUP BY 1;
+
+SELECT	ProductID,
+        LineTotal 
+FROM salesorderdetail
+WHERE ProductID=911
 ORDER BY 2;
+
+SELECT	ProductID,
+        LineTotal 
+FROM salesorderdetail
+WHERE ProductID=942
+ORDER BY 2;
+
+SELECT ProductID, Cnt, AVG(LineTotal) mediana,CEILING(Cnt/2), FLOOR(Cnt/2) + 1
+FROM (
+	SELECT	ProductID,
+			LineTotal, 
+			COUNT(*) OVER (PARTITION BY ProductID) AS Cnt,
+			ROW_NUMBER() OVER (PARTITION BY ProductID ORDER BY LineTotal) AS RowNum
+	FROM salesorderdetail) v
+WHERE 	(Cnt%2=0 AND (RowNum = FLOOR(Cnt/2) + 1))
+	    OR
+		(RowNum = CEILING(Cnt/2))
+GROUP BY 1;
+
+-- RESOLUCION FINAL OPTIMIZADA RAPIDA
+SELECT ProductID, AVG(LineTotal) mediana
+FROM (
+	SELECT	ProductID,
+			LineTotal, 
+			COUNT(*) OVER (PARTITION BY ProductID) AS C,
+			ROW_NUMBER() OVER (PARTITION BY ProductID ORDER BY LineTotal) AS R
+	FROM salesorderdetail) v
+WHERE 	(C%2=0 AND (R = FLOOR(C/2) + 1))
+	    OR
+		(R = CEILING(C/2))
+GROUP BY 1;
+
+
+
 
 
 

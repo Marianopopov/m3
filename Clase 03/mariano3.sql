@@ -1,3 +1,4 @@
+-- Active: 1693354461857@@127.0.0.1@3306@adventureworks
 /*Para resolver estas actividades usaremos la base de datos "adventureworks" del script AdventureWorks.sql (de la clase 1).
 
 Recuerda revisar la cápsula de la clase para reforzar cómo realizar subconsultas.
@@ -135,8 +136,7 @@ from
         d.linetotal,
         count(*) over (PARTITION BY d.`ProductID`) as conteo,
         ROW_NUMBER () OVER (PARTITION BY d.`ProductID` ORDER BY d.linetotal) as row_num
-    FROM salesorderheader H
-        join salesorderdetail D on (h.salesorderID = d.salesorderID)) as sub
+    FROM salesorderdetail d) as sub
 where (FLOOR(conteo/2) = CEILING(conteo/2) and row_num = FLOOR(conteo/2) or row_num = FLOOR(conteo/2) + 1) 
             or ((FLOOR(conteo/2)) <> CEILING(conteo/2) AND row_num = CEILING(conteo/2))
 GROUP BY productID

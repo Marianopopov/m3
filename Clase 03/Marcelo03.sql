@@ -121,13 +121,43 @@ GROUP BY 1
 ORDER BY 1;
 
 
+-- RESOLUCION USANDO VENTANA
+SELECT name
+    , valor_total
+    , ROUND(100*valor_total/sum(valor_total) OVER (),2) "%_valor_total"
+    , prod_vendidos
+    , ROUND(100*prod_vendidos/sum(prod_vendidos)  OVER (),2) "%_prod_vendidos"
+FROM (SELECT c.`Name` name
+        , ROUND(SUM(`LineTotal`),2) valor_total
+        , ROUND(SUM(`OrderQty`),2) prod_vendidos
+        FROM salesorderdetail d
+        JOIN product p
+            ON d.`ProductID`=p.`ProductID`
+        JOIN productsubcategory s
+            ON p.`ProductSubcategoryID`=s.`ProductSubcategoryID`
+        JOIN productcategory c
+            ON s.`ProductCategoryID`=c.`ProductCategoryID`
+    GROUP BY 1) as sub
+ORDER BY 1;
+
+
+
+
 -- 3. Obtener un listado por país (según la dirección de envío),
 --  con el valor total de ventas y productos vendidos,
 --   mostrando para ambos, su porcentaje respecto del total.
 
 SELECT * FROM salesorderheader;
 
-SELECT c.`Name` 
+SELECT c.`Name`
+    , round(sum(`LineTotal`),2) total_vta
+    , round(100*sum(`LineTotal`)/
+                (SELECT sum(LineTotal)
+                    FROM salesorderdetail),2) "%_total_vta"
+    , sum(`OrderQty`) cant_vtas
+    , round(100*sum(`OrderQty`)/
+                (SELECT sum(`OrderQty`)
+                    FROM salesorderdetail),2) "%_cant_vtas"
     FROM salesorderheader h
     JOIN salesorderdetail d
         ON h.`SalesOrderID`=d.`SalesOrderID`
@@ -137,8 +167,30 @@ SELECT c.`Name`
         ON a.`StateProvinceID`=p.`StateProvinceID`
     JOIN countryregion c
         ON p.`CountryRegionCode`=c.`CountryRegionCode`
-GROUP BY 1;
+GROUP BY 1
+ORDER BY 1;
 
+
+-- RESOLUCION USANDO VENTANA
+SELECT name
+    , total_vta
+    , ROUND(100*total_vta/sum(total_vta)  OVER (),2) "%_total_vta"
+    , cant_vtas
+    , ROUND(100*cant_vtas/sum(cant_vtas)  OVER (),2) "%_cant_vtas"
+    FROM(SELECT c.`Name` as name
+            , round(sum(`LineTotal`),2) total_vta
+            , sum(`OrderQty`) cant_vtas
+            FROM salesorderheader h
+            JOIN salesorderdetail d
+                ON h.`SalesOrderID`=d.`SalesOrderID`
+            JOIN address a  
+                ON h.`ShipToAddressID`=a.`AddressID`
+            JOIN stateprovince p
+                ON a.`StateProvinceID`=p.`StateProvinceID`
+            JOIN countryregion c
+                ON p.`CountryRegionCode`=c.`CountryRegionCode`
+        GROUP BY 1) as sub
+ORDER BY 1;
 
 -- 4. Obtener por ProductID, los valores correspondientes a la mediana de las ventas (LineTotal)
 -- , sobre las ordenes realizadas. Investigar las funciones FLOOR() y CEILING()

@@ -67,7 +67,7 @@ ORDER BY 1,2;
 
 
 -- RESOLUCION 2
--- USANDO VENTANA
+-- USANDO VENTANA en FROM
 SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY anio),2) "%"
     FROM(
         SELECT YEAR(`OrderDate`) as anio
@@ -79,6 +79,31 @@ SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY 
             JOIN salesorderdetail d
                 ON h.`SalesOrderID`=d.`SalesOrderID`
             GROUP BY 1,2) as sub
+
+
+-- USANDO VENTANA EN SELECT
+SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY anio),2) "%"
+    FROM(
+        SELECT YEAR(`OrderDate`) as anio
+            , s.`Name` as metodo
+            , SUM(`OrderQty`) as suma
+            FROM salesorderheader h
+            JOIN shipmethod s
+                ON h.`ShipMethodID`=s.`ShipMethodID`
+            JOIN salesorderdetail d
+                ON h.`SalesOrderID`=d.`SalesOrderID`
+            GROUP BY 1,2) as sub
+
+SELECT
+    YEAR(h.OrderDate) AS Año
+    , e.Name AS Metodo_Envio
+    , SUM(d.OrderQty) AS Cantidad
+    , ROUND(SUM(d.OrderQty)* 100.0/SUM(SUM(d.OrderQty)) OVER (PARTITION BY YEAR(h.OrderDate)), 2) AS PorcentajeTotalAño
+FROM salesorderheader h JOIN salesorderdetail d
+    ON (h.SalesOrderID = d.SalesOrderID)
+JOIN shipmethod e
+    ON (e.ShipMethodID= h.ShipMethodID) GROUP BY YEAR(h.OrderDate), e.Name
+ORDER BY YEAR(h.OrderDate), e.Name;
 
 
 

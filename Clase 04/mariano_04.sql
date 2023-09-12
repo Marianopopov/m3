@@ -32,8 +32,8 @@ LOAD DATA LOCAL INFILE 'C:\\Users\\maria\\Desktop\\HENRY\\MOD 3\\Clases\\Clase 0
 INTO TABLE clientes_bkp  
 FIELDS TERMINATED BY ';'
 LINES TERMINATED BY '\n'
-(ID,Provincia,Nombre_y_Apellido,Domicilio,Telefono,Edad,Localidad,X,Y,col10)
-SET X = REPLACE(@X, ',', '.'), Y = REPLACE(@Y, ',', '.');
+IGNORE 1 lines
+(ID,Provincia,Nombre_y_Apellido,Domicilio,Telefono,Edad,Localidad,X,Y,col10);
 
 SELECT * FROM clientes_bkp;
 DROP Table clientes_bkp;

@@ -34,7 +34,7 @@ SELECT YEAR(`OrderDate`) as anio
                 JOIN salesorderdetail d
                     ON h.`SalesOrderID`=d.`SalesOrderID`
             WHERE YEAR(`OrderDate`)=anio
-            GROUP BY YEAR(`OrderDate`))*100 as "%"
+            GROUP BY YEAR(`OrderDate`))*100 as "por"
     FROM salesorderheader h
     JOIN shipmethod s
         ON h.`ShipMethodID`=s.`ShipMethodID`
@@ -48,7 +48,7 @@ GROUP BY YEAR(`OrderDate`), s.`Name`;
 SELECT YEAR(`OrderDate`) as anio
         , m.`Name`
         , SUM(`OrderQty`) as cantidad
-        , ROUND(100*SUM(`OrderQty`)/MIN(suma),2) as "%"
+        , ROUND(100*SUM(`OrderQty`)/MIN(suma),2) as "por"
         , MIN(suma) -- solo para ver los valores, da igual si es min/max/avg
     FROM salesorderdetail d
     JOIN salesorderheader h 
@@ -68,7 +68,7 @@ ORDER BY 1,2;
 
 -- RESOLUCION 2
 -- USANDO VENTANA en FROM
-SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY anio),2) "%"
+SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY anio),2) "por"
     FROM(
         SELECT YEAR(`OrderDate`) as anio
             , s.`Name` as metodo
@@ -82,7 +82,7 @@ SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY 
 
 
 -- USANDO VENTANA EN SELECT
-SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY anio),2) "%"
+SELECT anio, metodo, suma cantidad, ROUND(100*suma/SUM(suma) OVER (PARTITION BY anio),2) "por "
     FROM(
         SELECT YEAR(`OrderDate`) as anio
             , s.`Name` as metodo
@@ -132,9 +132,9 @@ GROUP BY 1;
 SELECT c.`Name`
     , ROUND(SUM(`LineTotal`),2) valor_total
     , ROUND(100*SUM(`LineTotal`)/(
-        SELECT sum(LineTotal) FROM salesorderdetail),2) "%_valor_total"
+        SELECT sum(LineTotal) FROM salesorderdetail),2) "por _valor_total"
     , ROUND(SUM(`OrderQty`),2) prod_vendidos
-    , ROUND(100*SUM(`OrderQty`)/(SELECT sum(`OrderQty`) FROM salesorderdetail),2) "%_prod_vendidos"
+    , ROUND(100*SUM(`OrderQty`)/(SELECT sum(`OrderQty`) FROM salesorderdetail),2) "por _prod_vendidos"
     FROM salesorderdetail d
     JOIN product p
         ON d.`ProductID`=p.`ProductID`
@@ -149,9 +149,9 @@ ORDER BY 1;
 -- RESOLUCION USANDO VENTANA
 SELECT name
     , valor_total
-    , ROUND(100*valor_total/sum(valor_total) OVER (),2) "%_valor_total"
+    , ROUND(100*valor_total/sum(valor_total) OVER (),2) "por _valor_total"
     , prod_vendidos
-    , ROUND(100*prod_vendidos/sum(prod_vendidos)  OVER (),2) "%_prod_vendidos"
+    , ROUND(100*prod_vendidos/sum(prod_vendidos)  OVER (),2) "por _prod_vendidos"
 FROM (SELECT c.`Name` name
         , ROUND(SUM(`LineTotal`),2) valor_total
         , ROUND(SUM(`OrderQty`),2) prod_vendidos
@@ -178,11 +178,11 @@ SELECT c.`Name`
     , round(sum(`LineTotal`),2) total_vta
     , round(100*sum(`LineTotal`)/
                 (SELECT sum(LineTotal)
-                    FROM salesorderdetail),2) "%_total_vta"
+                    FROM salesorderdetail),2) "por _total_vta"
     , sum(`OrderQty`) cant_vtas
     , round(100*sum(`OrderQty`)/
                 (SELECT sum(`OrderQty`)
-                    FROM salesorderdetail),2) "%_cant_vtas"
+                    FROM salesorderdetail),2) "por _cant_vtas"
     FROM salesorderheader h
     JOIN salesorderdetail d
         ON h.`SalesOrderID`=d.`SalesOrderID`
@@ -199,9 +199,9 @@ ORDER BY 1;
 -- RESOLUCION USANDO VENTANA
 SELECT name
     , total_vta
-    , ROUND(100*total_vta/sum(total_vta)  OVER (),2) "%_total_vta"
+    , ROUND(100*total_vta/sum(total_vta)  OVER (),2) "por _total_vta"
     , cant_vtas
-    , ROUND(100*cant_vtas/sum(cant_vtas)  OVER (),2) "%_cant_vtas"
+    , ROUND(100*cant_vtas/sum(cant_vtas)  OVER (),2) "por _cant_vtas"
     FROM(SELECT c.`Name` as name
             , round(sum(`LineTotal`),2) total_vta
             , sum(`OrderQty`) cant_vtas

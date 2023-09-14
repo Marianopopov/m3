@@ -1,3 +1,4 @@
+-- Active: 1693875076557@@127.0.0.1@3306@henry_04
 -- La Dirección de Ventas ha solicitado las siguientes tablas a Marketing con el fin de que sean integradas:
 
 -- 1) La tabla de puntos de venta propios.
@@ -30,6 +31,14 @@ drop table canaldeventa
 
 select * from canaldeventa
 
+-- Si hay valores repetidos en una columna
+SELECT descripcion, COUNT(*) as cantidad
+FROM canaldeventa
+GROUP BY descripcion
+HAVING COUNT(*) > 1;
+
+-- si hay valores nulos
+select * from  canaldeventa where descripcion and codigo is null
 
 -- 2)
 CREATE Table if not exists empleados(
@@ -56,6 +65,13 @@ drop table empleados
 select * from empleados
 
 
+SELECT id_empleado, COUNT(*) as cantidad
+FROM empleados
+GROUP BY id_empleado
+HAVING COUNT(*) > 1;
+
+-- Hay 17 ID repetidos 
+
 -- 3)
 CREATE Table if not exists proveedores(
       IDProveedor int PRIMARY KEY,
@@ -79,6 +95,8 @@ drop table proveedores
 
 select * from proveedores
 
+select * from proveedores where Nombre = '';
+-- Dos proveedores sin nombres
 
 -- 4)
 CREATE Table if not exists Clientes(
@@ -111,6 +129,7 @@ drop table Clientes
 
 select * from Clientes
 
+select * from clientes where 'col10' is not null
 
 -- 5)
 CREATE Table if not exists Productos(
@@ -132,7 +151,6 @@ ignore 1 lines
 drop table Productos
 
 select * from Productos
-
 
 -- 6)
 CREATE Table if not exists Ventas(
@@ -183,6 +201,7 @@ drop table TiposdeGasto
 select * from TiposdeGasto
 
 
+
 -- 8)
 CREATE Table if not exists Compra(
       IdCompra int PRIMARY KEY,
@@ -205,3 +224,5 @@ ignore 1 lines
 drop table Compra
 
 select * from Compra
+
+select* from compra where `IdProveedor` is null

@@ -23,7 +23,7 @@ ALTER TABLE `tiposdegasto` CHANGE `Descripcion` `Tipo_Gasto` VARCHAR(100);
 
 select * from tiposdegasto;
 
-ALTER TABLE `productos` CHANGE `ID_PRODUCTO` `IdProducto` INT(11) NOT NULL;
+ALTER TABLE `productos` CHANGE `ID_PRODUCTO` `IdProducto` INT NOT NULL;
 
 select * from productos;
 

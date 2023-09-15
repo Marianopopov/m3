@@ -241,7 +241,6 @@ CHARACTER SET latin1 -- Si no colocamos esta línea, no reconoce la codificació
 FIELDS TERMINATED BY ';' ENCLOSED BY '\"' ESCAPED BY '\"' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
 SELECT * FROM sucursal;
-TRUNCATE TABLE sucursal;
 
 DROP TABLE IF EXISTS tipo_gasto;
 

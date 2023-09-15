@@ -20,8 +20,8 @@ ENCLOSED BY '\"'
 ESCAPED BY '\"' 
 LINES TERMINATED BY '\n'
 ignore 1 lines
-(codigo, descripcion);
-#ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+(codigo, descripcion)
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 SELECT * FROM canal_venta;
 DROP Table canal_venta;
@@ -42,7 +42,8 @@ CREATE Table if not exists empleados(
             Sector VARCHAR(50),
             Cargo VARCHAR(50),
             Salario DECIMAL(10,2)
-      );
+      )
+      ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
 'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\empleados.csv'
@@ -69,7 +70,8 @@ CREATE Table if not exists proveedores(
                 State VARCHAR(50),
                 Country VARCHAR(50),
                 departamen VARCHAR(50)
-      );
+      )
+      ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
 'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\proveedores.csv'
@@ -103,7 +105,8 @@ CREATE Table clientes (
     Fecha_Ultima_Modificacion date,
     Usuario_Ultima_Modificacion varchar(100),
     Marca_Baja varchar(100)
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
 'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\clientes.csv'
@@ -131,7 +134,8 @@ CREATE Table productos (
             Concepto VARCHAR(100),
             Tipo VARCHAR(100),
             Precio decimal (10,2)
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
 'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\productos.csv'
@@ -163,7 +167,8 @@ CREATE Table venta (IdVenta int PRIMARY KEY,
                     IdProducto INT,
                     Precio DECIMAL(10,2),
                     Cantidad INT
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
 'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\venta.csv'
@@ -184,7 +189,8 @@ CREATE Table gasto (IdGasto int PRIMARY KEY,
                     IdTipoGasto INT,
                     Fecha date,
                     Monto DECIMAL (10,2)
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
 'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\gasto.csv'
@@ -206,7 +212,8 @@ CREATE Table compra (IdCompra int PRIMARY KEY,
                     Cantidad INT,
                     Precio DECIMAL(10,2),
                     IdProve int
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
 'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\compra.csv'
@@ -218,7 +225,38 @@ LINES TERMINATED BY '\n'
 ignore 1 lines
 ;
 SELECT * FROM compra;
-DROP Table compra;
 
-SELECT * from compra
-where `IdProve` = 1;
+DROP TABLE IF EXISTS sucursal;
+CREATE TABLE IF NOT EXISTS sucursal (
+	ID			INTEGER,
+	Sucursal	VARCHAR(40),
+	Domicilio	VARCHAR(150),
+	Localidad	VARCHAR(80),
+	Provincia	VARCHAR(50),
+	Latitud2	VARCHAR(30),
+	Longitud2	VARCHAR(30)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+LOAD DATA INFILE
+'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\Sucursales_ANSI.csv'
+INTO TABLE sucursal
+CHARACTER SET latin1 -- Si no colocamos esta línea, no reconoce la codificación adecuada ANSI
+FIELDS TERMINATED BY ';' ENCLOSED BY '\"' ESCAPED BY '\"' 
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+SELECT * FROM sucursal;
+TRUNCATE TABLE sucursal;
+
+DROP TABLE IF EXISTS `tipo_gasto`;
+CREATE TABLE IF NOT EXISTS `tipo_gasto` (
+  `IdTipoGasto` int(11) NOT NULL AUTO_INCREMENT,
+  `Descripcion` varchar(100) NOT NULL,
+  `Monto_Aproximado` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`IdTipoGasto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+LOAD DATA INFILE 
+'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\TiposDeGasto.csv' 
+INTO TABLE `tipo_gasto` 
+FIELDS TERMINATED BY ',' ENCLOSED BY '\"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+SELECT * FROM tipo_gasto;

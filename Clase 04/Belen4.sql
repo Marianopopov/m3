@@ -107,8 +107,8 @@ CREATE Table if not exists Clientes(
       Telefono varchar (50),
       Edad int,
       Localidad varchar (50),
-      X varchar (100),
-      Y varchar (100),
+      X DECIMAL(13,10),
+      Y DECIMAL(13,10),
       Fecha_Alta date,
       Usuario_Alta varchar (50),
       Fecha_Ultima_Modificacion date,
@@ -226,3 +226,25 @@ drop table Compra
 select * from Compra
 
 select* from compra where `IdProveedor` is null
+
+
+CREATE TABLE IF NOT EXISTS sucursales (
+	ID	      INTEGER,
+	Sucursal	VARCHAR(40),
+	Domicilio	VARCHAR(150),
+	Localidad	VARCHAR(80),
+	Provincia	VARCHAR(50),
+	Latitud	Decimal (13,10),
+	Longitud	Decimal (13,10)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+
+LOAD DATA INFILE 'C:\\Users\\belen\\OneDrive\\Escritorio\\M3\\m3\\Clase 04\\Homework_Resuelto\\Sucursales_UTF8.csv' 
+INTO TABLE sucursales
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ';' ENCLOSED BY '\"' ESCAPED BY '\"' 
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+
+SELECT * FROM sucursal;
+
+drop table sucursales

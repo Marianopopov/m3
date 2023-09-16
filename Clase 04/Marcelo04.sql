@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS sucursal (
 	Longitud2	VARCHAR(30)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
-LOAD DATA INFILE
+LOAD DATA LOCAL INFILE 
 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\Sucursales_ANSI.csv'
 INTO TABLE sucursal
 CHARACTER SET latin1 -- Si no colocamos esta línea, no reconoce la codificación adecuada ANSI
@@ -252,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `tipo_gasto` (
   PRIMARY KEY (`IdTipoGasto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
-LOAD DATA INFILE 
+LOAD DATA LOCAL INFILE 
 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\TiposDeGasto.csv' 
 INTO TABLE `tipo_gasto` 
 FIELDS TERMINATED BY ',' ENCLOSED BY '\"'

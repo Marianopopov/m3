@@ -21,6 +21,8 @@ VALUES (NEW.Fecha, NEW.Fecha_Entrega, NEW.IdCanal, NEW.IdCliente, NEW.IdEmpleado
 
 select CURRENT_USER,NOW();
 
+S
+
 truncate table fact_venta;
 -- truncate table fact_venta_auditoria;
 

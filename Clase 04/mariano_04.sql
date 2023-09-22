@@ -1,4 +1,6 @@
 -- Active: 1693354461857@@127.0.0.1@3306@henry_04
+
+select @@GLOBAL.secure_file_priv;
 CREATE DATABASE if not EXISTS henry_04;
 
 use henry_04;
@@ -219,6 +221,32 @@ ignore 1 lines
 ;
 SELECT * FROM compra;
 DROP Table compra;
+
+SELECT * from compra
+where `IdProve` = 1;
+
+-- sucursales
+
+CREATE Table sucursales (ID int primary KEY,
+                        Sucursal VARCHAR(50),
+                        Direccion VARCHAR(100),
+                        Localidad VARCHAR(100),
+                        Provincia VARCHAR(100),
+                        Latitud VARCHAR(50),
+                        Longitud VARCHAR(50)
+);
+
+LOAD DATA LOCAL INFILE 
+'C:\\Users\\maria\\Desktop\\HENRY\\m3\\Clases\\Clase 04\\Homework\\sucursales.csv'
+INTO TABLE sucursales  
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '\"' 
+ESCAPED BY '\"' 
+LINES TERMINATED BY '\n'
+ignore 1 lines
+;
+SELECT * FROM sucursales;
+DROP Table sucursales;
 
 SELECT * from compra
 where `IdProve` = 1;

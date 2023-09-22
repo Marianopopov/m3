@@ -1,5 +1,11 @@
 -- Active: 1693280239040@@127.0.0.1@3306@henry_04
+DROP DATABASE if EXISTS henry_04;
+
+
 CREATE DATABASE if not EXISTS henry_04;
+
+
+SELECT @@global.secure_file_priv;
 
 use henry_04;
 SET GLOBAL local_infile = 'ON';
@@ -8,26 +14,25 @@ SET GLOBAL local_infile = 'ON';
 -- un Excel frecuentemente utilizado para 
 -- contactar a cada sucursal, actualizada en 2021.
 -- CanalDeVenta.xlsx   pasar a CSV
+
+DROP TABLE IF EXISTS canal_venta;
 CREATE Table if not exists canal_venta(
       codigo INT PRIMARY KEY ,
-      descripcion VARCHAR(50));
+      descripcion VARCHAR(50))
+      ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
-'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\CanalDeVenta.csv'
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\CanalDeVenta.csv'
 INTO TABLE canal_venta  
 FIELDS TERMINATED BY ','
 ENCLOSED BY '\"' 
 ESCAPED BY '\"' 
 LINES TERMINATED BY '\n'
 ignore 1 lines
-(codigo, descripcion);
-#ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+(codigo, descripcion)
+;
 
 SELECT * FROM canal_venta;
-DROP Table canal_venta;
-----------------------------------------------------------------------------------
-
-
 
 -- La tabla de empleados, un Excel mantenido
 --  por el personal administrativo de RRHH.
@@ -42,10 +47,11 @@ CREATE Table if not exists empleados(
             Sector VARCHAR(50),
             Cargo VARCHAR(50),
             Salario DECIMAL(10,2)
-      );
+      )
+      ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
-'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\empleados.csv'
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\empleados.csv'
 INTO TABLE empleados  
 FIELDS TERMINATED BY ';'
 ENCLOSED BY '\"' 
@@ -55,7 +61,6 @@ ignore 1 lines
 (ID_empleado,Apellido,Nombre,Sucursal,Sector,Cargo,Salario);
 
 SELECT * from empleados;
-DROP table empleados;
 
 -- La tabla de proveedores, un Excel mantenido por un analista 
 -- de otra dirección que ya no esta en la empresa.
@@ -69,10 +74,11 @@ CREATE Table if not exists proveedores(
                 State VARCHAR(50),
                 Country VARCHAR(50),
                 departamen VARCHAR(50)
-      );
+      )
+      ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
-'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\proveedores.csv'
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\proveedores.csv'
 INTO TABLE proveedores  
 FIELDS TERMINATED BY ','
 ENCLOSED BY '\"' 
@@ -82,7 +88,6 @@ ignore 1 lines
 ;
 
 SELECT * FROM proveedores;
-DROP Table proveedores;
 
 -- La tabla de clientes, alojada en el CRM de la empresa.
 -- Clientes.csv  ya esta en CSV
@@ -103,10 +108,11 @@ CREATE Table clientes (
     Fecha_Ultima_Modificacion date,
     Usuario_Ultima_Modificacion varchar(100),
     Marca_Baja varchar(100)
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
-'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\clientes.csv'
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\clientes.csv'
 INTO TABLE clientes  
 FIELDS TERMINATED BY ','
 ENCLOSED BY '\"' 
@@ -117,8 +123,6 @@ ignore 1 lines
 Usuario_Alta,Fecha_Ultima_Modificacion,Usuario_Ultima_Modificacion,Marca_Baja);
 
 SELECT * FROM clientes;
-DROP Table clientes;
-
 
 
 -- La tabla de productos, un Excel mantenido por otro analista.
@@ -131,10 +135,11 @@ CREATE Table productos (
             Concepto VARCHAR(100),
             Tipo VARCHAR(100),
             Precio decimal (10,2)
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
-'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\productos.csv'
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\productos.csv'
 INTO TABLE productos  
 FIELDS TERMINATED BY ','
 ENCLOSED BY '\"' 
@@ -144,8 +149,6 @@ ignore 1 lines
 ;
 
 SELECT * FROM productos;
-DROP Table productos;
-
 
 -- Las tablas de ventas, gastos y compras, tres archivos CSV 
 -- generados a partir del sistema transaccional de la empresa.
@@ -163,10 +166,11 @@ CREATE Table venta (IdVenta int PRIMARY KEY,
                     IdProducto INT,
                     Precio DECIMAL(10,2),
                     Cantidad INT
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
-'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\venta.csv'
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\venta.csv'
 INTO TABLE venta  
 FIELDS TERMINATED BY ','
 ENCLOSED BY '\"' 
@@ -175,7 +179,6 @@ LINES TERMINATED BY '\n'
 ignore 1 lines
 ;
 SELECT DISTINCT `IdVenta` FROM venta;
-DROP Table venta;
 
 -- gastos 
  
@@ -184,10 +187,11 @@ CREATE Table gasto (IdGasto int PRIMARY KEY,
                     IdTipoGasto INT,
                     Fecha date,
                     Monto DECIMAL (10,2)
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
-'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\gasto.csv'
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\gasto.csv'
 INTO TABLE gasto  
 FIELDS TERMINATED BY ','
 ENCLOSED BY '\"' 
@@ -196,7 +200,6 @@ LINES TERMINATED BY '\n'
 ignore 1 lines
 ;
 SELECT * FROM gasto;
-DROP Table gasto;
 
 -- Compra 
 
@@ -206,10 +209,11 @@ CREATE Table compra (IdCompra int PRIMARY KEY,
                     Cantidad INT,
                     Precio DECIMAL(10,2),
                     IdProve int
-    );
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 LOAD DATA LOCAL INFILE 
-'C:\\Users\\Marcelo\\Documents\\Henry DataPT05\\m3\\Clase 04\\Homework\\compra.csv'
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\compra.csv'
 INTO TABLE compra  
 FIELDS TERMINATED BY ','
 ENCLOSED BY '\"' 
@@ -218,7 +222,39 @@ LINES TERMINATED BY '\n'
 ignore 1 lines
 ;
 SELECT * FROM compra;
-DROP Table compra;
 
-SELECT * from compra
-where `IdProve` = 1;
+DROP TABLE IF EXISTS sucursal;
+CREATE TABLE IF NOT EXISTS sucursal (
+	ID			INTEGER,
+	Sucursal	VARCHAR(40),
+	Domicilio	VARCHAR(150),
+	Localidad	VARCHAR(80),
+	Provincia	VARCHAR(50),
+	Latitud2	VARCHAR(30),
+	Longitud2	VARCHAR(30)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+LOAD DATA LOCAL INFILE 
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\Sucursales_ANSI.csv'
+INTO TABLE sucursal
+CHARACTER SET latin1 -- Si no colocamos esta línea, no reconoce la codificación adecuada ANSI
+FIELDS TERMINATED BY ';' ENCLOSED BY '\"' ESCAPED BY '\"' 
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+SELECT * FROM sucursal;
+
+DROP TABLE IF EXISTS tipo_gasto;
+
+
+CREATE TABLE IF NOT EXISTS `tipo_gasto` (
+  `IdTipoGasto` int(11) NOT NULL AUTO_INCREMENT,
+  `Descripcion` varchar(100) NOT NULL,
+  `Monto_Aproximado` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`IdTipoGasto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+LOAD DATA LOCAL INFILE 
+'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\TiposDeGasto.csv' 
+INTO TABLE `tipo_gasto` 
+FIELDS TERMINATED BY ',' ENCLOSED BY '\"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+SELECT * FROM tipo_gasto;
